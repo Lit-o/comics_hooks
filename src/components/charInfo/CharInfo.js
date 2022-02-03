@@ -1,85 +1,59 @@
 import './charInfo.scss';
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import ComicsAPI from '../../api/ComicsAPI';
 import { Error } from '../error/Error';
 import Preloader from '../spinner/Preloader';
 import Skeleton from '../skeleton/Skeleton';
 
-class CharInfo extends Component {
-    state = {
-        char: null,
-        isLoading: true,
-        isError: false,
-    }
+const CharInfo = (props) => {
+    const [char, setChar] = useState(null)
+    const [isLoading, setIsLoading] = useState(true)
+    const [isError, setIsError] = useState(false)
 
-    server = new ComicsAPI();
+    const server = new ComicsAPI();
 
-    updateChar = () => {
-        this.setState({
-            isLoading: false,
-            isError: false
-        })
-        const id = this.props.charId
+    const updateChar = () => {
+        setIsLoading(false)
+        setIsError(false)
+        const id = props.charId
         // останавливаем функцию, если нет id
         if (!id) { return }
-        this.server
+        server
             .getCharacter(id)
-            .then(this.charLoaded)
-            .catch(this.errorCatched)
-
+            .then(charLoaded)
+            .catch(errorCatched)
         // handmade error
         // this.foo.bar = 0
     }
 
-    charLoaded = (char) => {
-        this.setState({
-            // (char: char)
-            char,
-            isLoading: false
-        })
+    const charLoaded = (char) => {
+        setChar(char)
+        setIsLoading(false)
     }
 
-    errorCatched = () => {
-        this.setState({
-            isLoading: false,
-            isError: true
-        })
+    const errorCatched = () => {
+        setIsLoading(false)
+        setIsError(true)
     }
 
-    componentDidMount() {
-        this.updateChar()
-    }
+    useEffect(() => {
+        updateChar()
+    // eslint-disable-next-line
+    }, [props.charId])
 
-    componentDidUpdate(prevProps, prevState) {
-        if (this.props.charId !== prevProps.charId) {
-            this.updateChar()
-        }
-    }
+    const skeleton = char || isError || isLoading ? null : <Skeleton />
+    const errorMessage = isError ? <Error /> : null;
+    const spinner = isLoading && <Preloader />;
+    const content = !(isLoading || isError || !char) && <View char={char} />;
 
-    // componentDidCatch(err, info) {
-    //     console.log(err, info)
-    //     this.setState({isError: true})
-    // } устаревший метод, с версии >16 нужно использовать класс предохранитель
-
-
-
-    render() {
-        const { char, isLoading, isError } = this.state;
-
-        const skeleton = char || isError || isLoading ? null : <Skeleton />
-        const errorMessage = isError ? <Error /> : null;
-        const spinner = isLoading && <Preloader />;
-        const content = !(isLoading || isError || !char) && <View char={char} />;
-
-        return (
-            <div className="char__info">
-                {skeleton}
-                {spinner}
-                {errorMessage}
-                {content}
-            </div>
-        )
-    }
+    return (
+        <div className="char__info">
+            {skeleton}
+            {spinner}
+            {errorMessage}
+            {content}
+        </div>
+    )
 }
 
 const View = ({ char }) => {
@@ -107,16 +81,9 @@ const View = ({ char }) => {
             </div>
             <div className="char__comics">Comics:</div>
             <ul className="char__comics-list">
-                {comics.length === 0 && <EmptyComics/>}
+                {comics.length === 0 && <EmptyComics />}
                 {
                     comics.map((el, i) => {
-                        // if (i < 10) {
-                        //     return (
-                        //         <li key={i} className="char__comics-item">
-                        //             {el.name}
-                        //         </li>
-                        //     )
-                        // }
                         // eslint-disable-next-line
                         if (i > 9) return;
                         return (
@@ -124,7 +91,6 @@ const View = ({ char }) => {
                                 {el.name}
                             </li>
                         )
-
                     })
                 }
             </ul>

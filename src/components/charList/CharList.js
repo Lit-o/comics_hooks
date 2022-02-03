@@ -1,6 +1,5 @@
 import './charList.scss';
-// import abyss from '../../resources/img/abyss.jpg';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import ComicsAPI from '../../api/ComicsAPI';
 import Preloader from '../spinner/Preloader';
 import { Error } from '../error/Error';
@@ -48,7 +47,6 @@ const CharList = (props) => {
         setIsLoading(false)
         setIsError(true)
     }
-
 
     const { charId } = props
     const notFoundImgLink = 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg';
