@@ -7,40 +7,37 @@ import ErrorBoundary from "../errorBoundary/ErrorBoundary";
 // import ComicsAPI from "../../api/ComicsAPI"
 
 import decoration from '../../resources/img/vision.png';
-import { Component } from "react";
+import { useState } from "react";
 
-class App extends Component {
-    state = {
-        selectedChar: null
-    }
+const App = () => {
 
-    changeCharSelected = (id) => {
-        this.setState({
-            selectedChar: id
-        })
+    const [selectedChar, setSelectedChar] = useState(null)
+
+    const changeCharSelected = (id) => {
+        setSelectedChar(id)
     }
-    render() {
-        // console.log(this.state.selectedChar)
-        return (
-            <div className="app">
-                <AppHeader />
-                <main>
+    
+    // console.log(this.state.selectedChar)
+
+    return (
+        <div className="app">
+            <AppHeader />
+            <main>
+                <ErrorBoundary>
+                    <RandomChar />
+                </ErrorBoundary>
+
+                <div className="char__content">
+                    <CharList changeCharSelected={changeCharSelected} charId={selectedChar} />
                     <ErrorBoundary>
-                        <RandomChar />
+                        <CharInfo charId={selectedChar} />
                     </ErrorBoundary>
-
-                    <div className="char__content">
-                        <CharList changeCharSelected={this.changeCharSelected} charId={this.state.selectedChar}/>
-                        <ErrorBoundary>
-                            <CharInfo charId={this.state.selectedChar} />
-                        </ErrorBoundary>
-                    </div>
-                    <img className="bg-decoration" src={decoration} alt="vision" />
-                </main>
-            </div>
-        )
-    }
-
+                </div>
+                <img className="bg-decoration" src={decoration} alt="vision" />
+            </main>
+        </div>
+    )
 }
+
 
 export default App;
