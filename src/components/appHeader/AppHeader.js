@@ -17,6 +17,7 @@ const AppHeader = () => {
                     <li><NavLink exact activeStyle={{color: '#9F0010'}} to="/comics">Comics</NavLink></li>
 
                     {/* Router 6.2.1
+                    npm i react-router-dom@6.2.1 --save
 
                     <li><NavLink end 
                     style={({isActive}) => ({color: isActive ? '#9F0010' : 'inherit'})}
@@ -25,9 +26,7 @@ const AppHeader = () => {
                     <li><NavLink end 
                     style={({isActive}) => ({color: isActive && '#9F0010'})}
                     className={({isActive}) => "naw-link" + (isActivated ? " activated" : "")}
-
                     to="/comics">Comics</NavLink></li> */}
-
                 </ul>
             </nav>
         </header>

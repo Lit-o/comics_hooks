@@ -22,7 +22,10 @@ const App = () => {
                         </Route>
                     </Switch>
 
-                    {/* <Routes> Router 6.2.1
+                    {/* 
+                    Router 6.2.1
+                    npm i react-router-dom@6.2.1 --save
+                    <Routes> 
                         <Route path="/" element={<MainPage />} />                            
                         <Route path="/comics" element={<ComicsPage />}/>                            
                     </Routes> */}
