@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom'
 
 import AppHeader from "../appHeader/AppHeader";
 import { MainPage, ComicsPage } from '../pages'
@@ -9,13 +9,16 @@ const App = () => {
             <div className="app">
                 <AppHeader />
                 <main>
-                    <Switch> 
+                    <Switch>
                         {/* Route 5.3.0 path="/" - прописываем, чтобы указать, что это первая страница, которая идет изначально */}
                         <Route path="/" exact>
-                            <MainPage/>
+                            <MainPage />
                         </Route>
                         <Route path="/comics" exact>
-                            <ComicsPage/>
+                            <ComicsPage />
+                        </Route>
+                        <Route path="*" >
+                            <><h1>Not found</h1><Link to="/" style={{textDecoration: "underline", paddingTop: 20}}>Go to main page</Link></>
                         </Route>
                     </Switch>
 
