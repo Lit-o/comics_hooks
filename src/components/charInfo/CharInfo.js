@@ -1,39 +1,29 @@
 import './charInfo.scss';
 import { useState, useEffect } from 'react';
-import ComicsAPI from '../../api/ComicsAPI';
+import useComicsAPI from '../../api/ComicsAPI';
 import { Error } from '../error/Error';
 import Preloader from '../spinner/Preloader';
 import Skeleton from '../skeleton/Skeleton';
 
 const CharInfo = (props) => {
     const [char, setChar] = useState(null)
-    const [isLoading, setIsLoading] = useState(true)
-    const [isError, setIsError] = useState(false)
 
-    const server = new ComicsAPI();
+    const {isError, isLoading, getCharacter, clearError} = useComicsAPI();
 
     const updateChar = () => {
-        setIsLoading(false)
-        setIsError(false)
+        clearError()
         const id = props.charId
         // останавливаем функцию, если нет id
         if (!id) { return }
-        server
-            .getCharacter(id)
+
+        getCharacter(id)
             .then(charLoaded)
-            .catch(errorCatched)
         // handmade error
         // this.foo.bar = 0
     }
 
     const charLoaded = (char) => {
         setChar(char)
-        setIsLoading(false)
-    }
-
-    const errorCatched = () => {
-        setIsLoading(false)
-        setIsError(true)
     }
 
     useEffect(() => {
@@ -67,6 +57,10 @@ const View = ({ char }) => {
                 <div>
                     <div className="char__info-name">{name}</div>
                     <div className="char__btns">
+                        {/* 
+                        Since React Router version 5.0.1
+                        <Link to="route" target="_blank" rel="noopener noreferrer" /> 
+                        */}
                         <a href={homepage} className="button button__main">
                             <div className="inner">homepage</div>
                         </a>

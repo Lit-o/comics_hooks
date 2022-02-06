@@ -1,33 +1,31 @@
 import './charList.scss';
 import { useState, useEffect } from 'react';
-import ComicsAPI from '../../api/ComicsAPI';
+import useComicsAPI from '../../api/ComicsAPI';
 import Preloader from '../spinner/Preloader';
 import { Error } from '../error/Error';
 
 const CharList = (props) => {
-    const server = new ComicsAPI();
+    const {isError, isLoading, getAllCharacters, clearError} = useComicsAPI();
 
     const [chars, setChars] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
     const [isNewCharsLoading, setIsNewCharsLoading] = useState(false)
-    const [isError, setIsError] = useState(false);
     const [offset, setOffset] = useState(210);
     const [charsEnded, setCharsEnded] = useState(false);
 
     // useEffect запускается после рендера, поэтому стрелочная onRequest() сможет запуститься, хотя в коде объявлена дальше
     useEffect(() => {
-        onRequest()
+        onRequest(offset, true)
     }, [])
 
     useEffect(() => {
         console.log('rerender')
     })
 
-    const onRequest = (offset) => {
-        setIsNewCharsLoading(true)
-        server.getAllCharacters(offset)
+    const onRequest = (offset, initial) => {
+        clearError();
+        initial ? setIsNewCharsLoading(false) : setIsNewCharsLoading(true)
+        getAllCharacters(offset)
             .then(addedChars)
-            .catch(errorCatched)
     }
 
     const addedChars = (res) => {
@@ -36,21 +34,16 @@ const CharList = (props) => {
             ended = true
         }
         setChars(chars => [...chars, ...res])
-        setIsError(false)
-        setIsLoading(false)
+
         setIsNewCharsLoading(false)
         setOffset(offset => offset + 9)
         setCharsEnded(ended)
     }
 
-    const errorCatched = () => {
-        setIsLoading(false)
-        setIsError(true)
-    }
 
     const { charId } = props
     const notFoundImgLink = 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg';
-    const charArray = !(isLoading || isError) && chars.map(el => {
+    const charArray = chars.map(el => {
         return (
             <li
                 className={(charId === el.id) ? "char__item char__item_selected" : "char__item"}
@@ -75,7 +68,7 @@ const CharList = (props) => {
             </li>
         )
     });
-    const loading = isLoading && <Preloader />
+    const loading = isLoading && !isNewCharsLoading && <Preloader />
     const error = isError && <Error />
 
 

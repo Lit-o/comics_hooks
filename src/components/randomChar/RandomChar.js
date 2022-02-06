@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import ComicsAPI from '../../api/ComicsAPI';
+import useComicsAPI from '../../api/ComicsAPI';
 import { Error } from '../error/Error';
 
 import './randomChar.scss';
@@ -9,10 +9,9 @@ import Preloader from '../spinner/Preloader';
 const RandomChar = () => {
 
     const [char, setChar] = useState({})
-    const [isLoading, setIsLoading] = useState(true)
-    const [isError, setIsError] = useState(false)
-
-    const server = new ComicsAPI();
+    
+    // const server = useComicsAPI();
+    const {isError, isLoading, getCharacter, clearError} = useComicsAPI();
 
     useEffect(() => {
         updateChar()
@@ -21,22 +20,13 @@ const RandomChar = () => {
 
     const charLoaded = (char) => {
         setChar(char)
-        setIsLoading(false)
-    }
-
-    const errorCatched = () => {
-        setIsLoading(false)
-        setIsError(true)
     }
 
     const updateChar = () => {
-        setIsLoading(true)
-        setIsError(false)
+        clearError()
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000)
-        server
-            .getCharacter(id)
+        getCharacter(id)
             .then(charLoaded)
-            .catch(errorCatched)
     }
 
         const errorMessage = isError ? <Error/> : null;
