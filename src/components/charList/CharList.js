@@ -9,12 +9,13 @@ const CharList = (props) => {
 
     const [chars, setChars] = useState([]);
     const [isNewCharsLoading, setIsNewCharsLoading] = useState(false)
-    const [offset, setOffset] = useState(210);
+    const [offset, setOffset] = useState(395);
     const [charsEnded, setCharsEnded] = useState(false);
 
     // useEffect запускается после рендера, поэтому стрелочная onRequest() сможет запуститься, хотя в коде объявлена дальше
     useEffect(() => {
         onRequest(offset, true)
+    // eslint-disable-next-line
     }, [])
 
     useEffect(() => {
