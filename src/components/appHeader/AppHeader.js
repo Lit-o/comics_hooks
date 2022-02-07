@@ -14,7 +14,7 @@ const AppHeader = () => {
                     {/* Router 5.3.0 */}
                     <li><NavLink exact activeStyle={{color: '#9F0010'}} to="/">Characters</NavLink></li>
                     / 
-                    <li><NavLink exact activeStyle={{color: '#9F0010'}} to="/comics">Comics</NavLink></li>
+                    <li><NavLink activeStyle={{color: '#9F0010'}} to="/comics">Comics</NavLink></li>
 
                     {/* Router 6.2.1
                     npm i react-router-dom@6.2.1 --save
