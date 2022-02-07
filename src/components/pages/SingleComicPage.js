@@ -1,7 +1,38 @@
-import './singleComic.scss';
+import {useParams, Link} from 'react-router-dom'
+
+import { useState, useEffect } from 'react';
+import useComicsAPI from '../../api/ComicsAPI';
+import { Error } from '../error/Error';
+import Preloader from '../spinner/Preloader';
+
+import './singleComicPage.scss';
 import xMen from '../../resources/img/x-men.png';
 
-const SingleComic = () => {
+const SingleComicPage = () => {
+
+    // const comicId = useParams()
+    const {comicId} = useParams()
+    const [comic, setComic] = useState(null);
+
+    const {isError, isLoading, clearError, getComic} = useComicsAPI()
+
+    const updateComic = () => {
+        clearError()
+        getComic(comicId)
+            .then(comicLoaded)
+        // handmade error
+        // this.foo.bar = 0
+    }
+
+    const comicLoaded = (comic) => {
+        setComic(comic)
+    }
+
+    useEffect(() => {
+        updateComic()
+    // eslint-disable-next-line
+    }, [comicId])
+
     return (
         <div className="single-comic">
             <img src={xMen} alt="x-men" className="single-comic__img"/>
@@ -12,9 +43,9 @@ const SingleComic = () => {
                 <p className="single-comic__descr">Language: en-us</p>
                 <div className="single-comic__price">9.99$</div>
             </div>
-            <a href="#" className="single-comic__back">Back to all</a>
+            <Link to="/" className="single-comic__back">Back to all</Link>
         </div>
     )
 }
 
-export default SingleComic;
+export default SingleComicPage;

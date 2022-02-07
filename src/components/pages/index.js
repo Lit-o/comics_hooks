@@ -1,4 +1,5 @@
 import MainPage from './MainPage'
 import ComicsPage from './ComicsPage'
+import SingleComicPage from './SingleComicPage'
 
-export {MainPage, ComicsPage}
+export {MainPage, ComicsPage, SingleComicPage}

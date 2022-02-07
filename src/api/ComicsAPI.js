@@ -55,8 +55,13 @@ const useComicsAPI = () => {
         return res.data.results.map(_transformComics);
     }
 
+    const getComic = async (id) => {
+        const res = await request(`${_apiBase}comics/${id}?${_apiKey}`);
+        return _transformComics(res.data.results[0]);
+    }
 
-    return {isError, isLoading, getAllCharacters, getCharacter, clearError, getAllComics}
+
+    return {isError, isLoading, getAllCharacters, getCharacter, clearError, getAllComics, getComic}
 }
 
 export default useComicsAPI;
