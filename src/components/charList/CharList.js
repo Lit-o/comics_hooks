@@ -30,6 +30,7 @@ const CharList = (props) => {
     }
 
     const addedChars = (res) => {
+
         let ended = false;
         if (res.length < 9) {
             ended = true
@@ -72,6 +73,15 @@ const CharList = (props) => {
     const loading = isLoading && !isNewCharsLoading && <Preloader />
     const error = isError && <Error />
 
+    if (isLoading) {
+        // динамический импорт всегда возвращает promise с объектом загружаемого модуля
+        import('./someDynImportFunc')
+            // если экспорт именованный, мы обращаемся к имени функции
+            // .then(obj => obj.logger())
+            // если экспорт дефолтный, мы обращаемся к дефолту
+            .then(obj => obj.default())
+            .catch(console.log('dynamic import is fail'))
+    }
 
     return (
         <div className="char__list">
