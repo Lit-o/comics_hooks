@@ -75,7 +75,7 @@ const CharList = (props) => {
 
     if (isLoading) {
         // динамический импорт всегда возвращает promise с объектом загружаемого модуля
-        import('./someDynImportFunc')
+        import('../someDynImportFunc')
             // если экспорт именованный, мы обращаемся к имени функции
             // .then(obj => obj.logger())
             // если экспорт дефолтный, мы обращаемся к дефолту

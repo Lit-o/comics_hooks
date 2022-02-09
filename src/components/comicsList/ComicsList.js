@@ -9,19 +9,18 @@ import { Error } from '../error/Error';
 const ComicsList = () => {
 
     const [comicsList, setComicsList] = useState([]);
-    const [newItemLoading, setnewItemLoading] = useState(false);
     const [offset, setOffset] = useState(110);
     const [comicsEnded, setComicsEnded] = useState(false);
 
-    const {isLoading, isError, getAllComics} = useComicsAPI();
+    const {isLoading, isError, getAllComics, clearError} = useComicsAPI();
 
     useEffect(() => {
-        onRequest(offset, true);
+        onRequest(offset);
     // eslint-disable-next-line
     }, [])
 
-    const onRequest = (offset, initial) => {
-        initial ? setnewItemLoading(false) : setnewItemLoading(true);
+    const onRequest = (offset) => {
+        clearError()
         getAllComics(offset)
             .then(onComicsListLoaded)
     }
@@ -32,7 +31,6 @@ const ComicsList = () => {
             ended = true;
         }
         setComicsList([...comicsList, ...newComicsList]);
-        setnewItemLoading(false);
         setOffset(offset + 8);
         setComicsEnded(ended);
     }
@@ -60,18 +58,18 @@ const ComicsList = () => {
     const items = renderItems(comicsList);
 
     const errorMessage = isError ? <Error/> : null;
-    const spinner = isLoading && !newItemLoading ? <Preloader/> : null;
+    const spinner = isLoading  ? <Preloader/> : null;
 
     return (
-        <div className="comics__list">
-            {errorMessage}
-            {spinner}
+        <div className="comics__list">            
             {items}
+            {spinner}
+            {errorMessage}
             <button 
-                disabled={newItemLoading} 
+                disabled={isLoading} 
                 style={{'display' : comicsEnded ? 'none' : 'block'}}
                 className="button button__main button__long"
-                onClick={() => onRequest(offset)}>
+                onClick={() => onRequest(offset, false, isError)}>
                 <div className="inner">load more</div>
             </button>
         </div>
